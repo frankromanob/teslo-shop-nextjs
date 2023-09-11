@@ -1,6 +1,6 @@
 import { IProduct } from '@/interfaces'
-import { Box, Card, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material'
-import  { useMemo, useState } from 'react'
+import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Link, Typography } from '@mui/material'
+import { useMemo, useState } from 'react'
 import NextLink from "next/link";
 
 interface Props {
@@ -10,11 +10,12 @@ interface Props {
 export const ProductCard = ({ product }: Props) => {
 
     const [isHovered, setIsHovered] = useState(false)
+    const [isImageLoaded, setIsImageLoaded] = useState(false)
 
     const productImage = useMemo(() => {
         return isHovered
-            ? `products/${product.images[1]}`
-            : `products/${product.images[0]}`
+            ? `/products/${product.images[1]}`
+            : `/products/${product.images[0]}`
     }, [isHovered, product.images])
 
     return (
@@ -25,20 +26,32 @@ export const ProductCard = ({ product }: Props) => {
             onMouseLeave={() => setIsHovered(false)}
         >
             <Card>
-                <NextLink href='/product/slug' passHref legacyBehavior>
+                <NextLink href={`/product/${product.slug}`} passHref legacyBehavior>
                     <Link>
                         <CardActionArea>
+                            {
+                                (product.inStock === 0) && (
+                                    <Chip
+                                        color='primary'
+                                        label='No disponible'
+                                        sx={{ position: 'absolute', zIndex: 99, top: '10px', left: '10px' }}
+                                    />
+                                )
+                            }
+
                             <CardMedia
                                 component='img'
                                 className='fadeIn'
                                 image={productImage}
                                 alt={product.title}
+                                onLoad={() => setIsImageLoaded(true)}
                             />
                         </CardActionArea>
                     </Link>
                 </NextLink>
             </Card>
-            <Box sx={{ mt: 1 }} className='fadeIn'  >
+
+            <Box sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }} className='fadeIn'  >
                 <Typography fontWeight={700}>{product.title}</Typography>
                 <Typography fontWeight={200}>{`$${product.price}`}</Typography>
             </Box>

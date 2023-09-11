@@ -1,20 +1,24 @@
 
 import { ShopLayout } from '@/components/layouts'
-import { Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
-import { Inter } from 'next/font/google'
-import { initialData } from "../database/products";
+import { Typography } from '@mui/material'
 import { ProductList } from '@/components/products';
-
-const inter = Inter({ subsets: ['latin'] })
+import { useProducts } from '@/hooks';
+import { FullScreenLoading } from '@/components/ui';
 
 export default function Home() {
+
+  const { products, isLoading, isError } = useProducts('/products')
+  if (isError) return <div>Fallo en la carga de productos.</div>
+
   return (
     <ShopLayout title='Teslo Shop - Home Page' pageDescription={'Pagina principal de la tienda'}>
       <Typography variant='h1' component='h1'>Tienda</Typography>
-      <Typography variant='h2' sx={{mb:1}} >Todos los productos</Typography>
-
-    <ProductList products={initialData.products as any}/>
-
+      <Typography variant='h2' sx={{ mb: 1 }} >Todos los productos</Typography>
+      {
+        isLoading
+          ?<FullScreenLoading />
+          :<ProductList products={products} />
+      }
     </ShopLayout>
   )
 }
