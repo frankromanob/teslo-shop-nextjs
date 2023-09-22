@@ -1,16 +1,18 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import NextLink from "next/link";
 import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from "@mui/material"
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 
-import { UiContext } from "@/context";
+import { CartContext, UiContext } from "@/context";
 
 export const Navbar = () => {
     const { asPath, push } = useRouter()
 
     const { isMenuOpen, toogleSideMenu } = useContext(UiContext)
+
+    const { cart,numberOfItems } = useContext(CartContext)
 
     const [searchTerm, setSearchTerm] = useState("")
 
@@ -20,6 +22,16 @@ export const Navbar = () => {
         if (searchTerm.trim().length === 0) return;
         push(`/search/${searchTerm}`)
     }
+
+    // const cantidadItems = () => {
+    //     let cant = 0
+    //     if (cart.length > 0) {
+    //         for (var i = 0; i < cart.length; i++) {
+    //             cant += cart[i].quantity
+    //         }
+    //     }
+    //     return cant
+    // }
 
 
 
@@ -33,7 +45,7 @@ export const Navbar = () => {
                     </Link>
                 </NextLink>
                 <Box flex={1} />
-                <Box sx={{ display: isSearching?'none': { xs: 'none', sm: 'block' } }} 
+                <Box sx={{ display: isSearching ? 'none' : { xs: 'none', sm: 'block' } }}
                     className='fadeIn'
                 >
                     <NextLink href='/category/men' passHref legacyBehavior>
@@ -109,7 +121,7 @@ export const Navbar = () => {
                 <NextLink href='/cart' passHref legacyBehavior>
                     <Link>
                         <IconButton>
-                            <Badge badgeContent={2} color="secondary">
+                            <Badge badgeContent={numberOfItems<10?numberOfItems:'+9'} color="secondary">
                                 <ShoppingCartOutlined />
                             </Badge>
                         </IconButton>
@@ -120,3 +132,6 @@ export const Navbar = () => {
         </AppBar>
     )
 }
+
+
+export default Navbar

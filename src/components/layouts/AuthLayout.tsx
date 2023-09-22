@@ -23,3 +23,5 @@ export const AuthLayout = ({title,children}:PropsWithChildren<Props>) => {
     </>
   )
 }
+
+export default AuthLayout

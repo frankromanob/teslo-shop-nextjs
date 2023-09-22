@@ -43,3 +43,6 @@ export const ShopLayout = ({children, title,pageDescription,imageFullUrl}: Props
         </>
     )
 }
+
+
+export default ShopLayout

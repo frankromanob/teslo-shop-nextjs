@@ -21,7 +21,6 @@ export const CartPage = () => {
                             <Button color="secondary" className="circular-btn">Checkout</Button>
                         </Box>
                     </CardContent>
-
                 </Card>
             </Grid>
         </Grid>

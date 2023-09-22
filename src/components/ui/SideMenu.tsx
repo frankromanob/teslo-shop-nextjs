@@ -155,3 +155,5 @@ export const SideMenu = () => {
         </Drawer >
     )
 }
+
+export default SideMenu

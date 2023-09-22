@@ -11,7 +11,7 @@ export const HistoryPage = () => {
             field: 'paid',
             headerName:'Pagada',
             width:200,
-            renderCell: (params: GridValueGetterParams)=>{
+            renderCell: (params)=>{
                 return (
                     params.row.paid
                         ? <Chip color="success" label="Pagada" variant='outlined' />
@@ -24,7 +24,7 @@ export const HistoryPage = () => {
             headerName:'Ver Orden',
             width:200,
             sortable:false,
-            renderCell: (params: GridValueGetterParams)=>{
+            renderCell: (params)=>{
                 return (
                     <NextLink href={`/orders/${params.row.id}`} passHref legacyBehavior>
                         <Button variant='outlined'>
