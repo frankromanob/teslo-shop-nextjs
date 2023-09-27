@@ -1,4 +1,3 @@
-import { initialData } from "@/database/products"
 import { Link, CardActionArea, CardMedia, Grid, Typography, Box, Button } from "@mui/material"
 
 import NextLink from "next/link";
