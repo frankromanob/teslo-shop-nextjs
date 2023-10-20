@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '@/database';
 import User from '@/models/User';
-import jwt from 'jsonwebtoken';
-import { jwt as JWT } from '../../../utils'
+import  {jwt }  from '../../../utils'
 
 
 type Data =
@@ -55,7 +54,7 @@ const validateJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // const token=jwt.signToken(_id,email)
 
     return res.status(200).json({
-        token: JWT.signToken(_id, email),
+        token: jwt.signToken(_id, email),
         user: {
             email, role, name
         }
@@ -63,24 +62,9 @@ const validateJWT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 }
 
 
-const isValidToken = (token: string): Promise<string> => {
-    if (!process.env.JWT_SECRET_SEED) {
-        throw new Error('No se encontró semilla de JWT')
+const isValidToken = (token: string) => {
+
+
+         return   jwt.isValidToken(token)
+
     }
-
-    return new Promise((resolve, reject) => {
-        try {
-
-            jwt.verify(token, process.env.JWT_SECRET_SEED || '', (err, payload) => {
-                if (err) return reject('JWT no es válido');
-
-                const { _id } = payload as { _id: string }
-
-                resolve(_id)
-            })
-        } catch (error) {
-            console.log(error)
-            reject('JWT no es válido');
-        }
-    })
-}

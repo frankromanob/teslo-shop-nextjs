@@ -2,9 +2,27 @@ import { CardList, OrderSummary } from "@/components/cart"
 import { ShopLayout } from "@/components/layouts"
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material"
 import NextLink from "next/link";
+import { useContext, useEffect } from "react";
+import { CartContext } from "@/context";
+import { countries } from "@/utils";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 
 export const SummaryPage = () => {
+
+    const { shippingAddress, createOrder } = useContext(CartContext)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (!Cookies.get('teslo-dir')) {
+            router.push('/checkout/address')
+        }
+    }, [router])
+
+    const onCreateOrder = () => {
+        createOrder()
+    }
     return (
         <ShopLayout title={"Resumen de la orden"} pageDescription={"Resumen de la orden"}>
             <Typography variant='h1' component='h1'>Carrito</Typography>
@@ -24,11 +42,14 @@ export const SummaryPage = () => {
                                 </NextLink>
                             </Box>
 
-                            <Typography>Francisco Romano</Typography>
-                            <Typography>Calle 1</Typography>
-                            <Typography>Rep. Alla</Typography>
-                            <Typography>Santo Domingo</Typography>
-                            <Typography>1 809 809 8099</Typography>
+                            <Typography>{shippingAddress?.firstName + ' ' + shippingAddress?.lastName}</Typography>
+                            <Typography>{shippingAddress?.address1}</Typography>
+                            {shippingAddress?.address2 &&
+                                <Typography>{shippingAddress.address2}</Typography>
+                            }
+                            <Typography>{shippingAddress?.city}</Typography>
+                            <Typography>{countries.find(c => c.code === shippingAddress?.country)?.name}</Typography>
+                            <Typography>{shippingAddress?.phone}</Typography>
                             <Divider sx={{ my: 1 }} />
 
                             <Box display='flex' justifyContent='end'>
@@ -38,8 +59,12 @@ export const SummaryPage = () => {
                             </Box>
                             <OrderSummary />
 
-                            <Box  sx={{ mt: 3 }}>
-                                <Button color="secondary" className="circular-btn">Confirmar orden</Button>
+                            <Box sx={{ mt: 3 }}>
+                                <Button color="secondary" className="circular-btn"
+                                    onClick={()=>onCreateOrder()}
+                                >
+                                    Confirmar orden
+                                </Button>
                             </Box>
                         </CardContent>
 

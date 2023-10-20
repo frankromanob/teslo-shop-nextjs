@@ -13,18 +13,31 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.0",
     "@mui/material": "^5.14.0",
+    "@mui/x-data-grid": "^6.11.0",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "autoprefixer": "10.4.14",
+    "bcryptjs": "^2.4.3",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.4.2",
     "next": "13.4.9",
+    "next-auth": "^4.24.3",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.46.2",
     "react-slideshow-image": "^4.2.1",
+    "swr": "^2.2.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.4",
+    "@types/js-cookie": "^3.0.4",
+    "@types/jsonwebtoken": "^9.0.3"
   }
 }

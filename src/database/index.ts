@@ -7,3 +7,5 @@ export * as seedDatabase from './products'
 export * as seedUserData from './users'
 
 export * from './constants'
+
+export * from './dbUsers'

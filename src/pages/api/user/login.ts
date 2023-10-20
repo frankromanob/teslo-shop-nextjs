@@ -15,6 +15,8 @@ type Data =
         }
     }
 
+
+
 export default function Handler(req: NextApiRequest, res: NextApiResponse<Data>) {
 
     switch (req.method) {

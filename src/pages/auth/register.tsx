@@ -1,11 +1,11 @@
 
-import { tesloApi } from '@/api';
 import { AuthLayout } from '@/components/layouts'
 import { AuthContext } from '@/context';
 import { validations } from '@/utils';
 import { ErrorOutline } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
-import Cookies from 'js-cookie';
+import { GetServerSideProps } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import NextLink from "next/link";
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
@@ -49,8 +49,10 @@ export const RegisterPage = () => {
             return
         }
 
-        router.replace('/')
+        // const destination = router.query.p?.toString() || '/';
+        // router.replace(destination)
 
+        await signIn('credentials', { email, password });
         // try {
 
         //     const { data } = await tesloApi.post('/user/register', { email, password, name })
@@ -131,7 +133,7 @@ export const RegisterPage = () => {
 
                         </Grid>
                         <Grid item xs={12} display='flex' justifyContent='end'>
-                            <NextLink href='/auth/login' passHref legacyBehavior>
+                            <NextLink href={router.query.p ? `/auth/login?p=${router.query.p}` : '/auth/login'} passHref legacyBehavior>
                                 <Link underline='always'>
                                     Ya tienes cuenta?
                                 </Link>
@@ -144,5 +146,26 @@ export const RegisterPage = () => {
     )
 }
 
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+
+
+    const session = await getSession({ req })
+    const { p = '/' } = query
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+        }
+    }
+}
 
 export default RegisterPage

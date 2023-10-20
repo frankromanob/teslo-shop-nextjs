@@ -1,17 +1,21 @@
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, Person2Outlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
-import { UiContext } from "../../context";
+import { AuthContext, UiContext } from "../../context";
 import { useContext, useState } from 'react';
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 export const SideMenu = () => {
+
+    const { isLoggedIn, logoutUser, user } = useContext(AuthContext)
+
     const { isMenuOpen, toogleSideMenu } = useContext(UiContext)
     const router = useRouter()
 
     const [searchTerm, setSearchTerm] = useState("")
 
-    const onSearchTerm=()=>{
-        if(searchTerm.trim().length===0) return;
+    const onSearchTerm = () => {
+        if (searchTerm.trim().length === 0) return;
         navigateSideMenu(`/search/${searchTerm}`)
     }
 
@@ -19,7 +23,12 @@ export const SideMenu = () => {
         toogleSideMenu()
         router.push(url)
     }
-
+    const onLogout = () => {
+        Cookies.remove('teslocart')
+        Cookies.remove('token')
+        logoutUser()
+        navigateSideMenu('/')
+    }
     return (
         <Drawer
             open={isMenuOpen}
@@ -34,17 +43,17 @@ export const SideMenu = () => {
                             autoFocus
                             type='text'
                             value={searchTerm}
-                            onChange={(e)=>setSearchTerm(e.target.value)}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar..."
                             onKeyPress={
-                                (e)=> e.key==='Enter'
+                                (e) => e.key === 'Enter'
                                     ? onSearchTerm()
                                     : null}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        onClick={()=>onSearchTerm()}
-                                   >
+                                        onClick={() => onSearchTerm()}
+                                    >
                                         <SearchOutlined />
                                     </IconButton>
                                 </InputAdornment>
@@ -52,19 +61,22 @@ export const SideMenu = () => {
                         />
                     </ListItem>
 
-                    <ListItemButton onClick={toogleSideMenu} >
-                        <ListItemIcon>
-                            <AccountCircleOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Perfil'} />
-                    </ListItemButton>
+                    {isLoggedIn && <>
+                        <ListItemButton onClick={toogleSideMenu} >
+                            <ListItemIcon>
+                                <AccountCircleOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Perfil'} />
+                        </ListItemButton>
 
-                    <ListItemButton onClick={toogleSideMenu} >
-                        <ListItemIcon>
-                            <ConfirmationNumberOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Mis Ordenes'} />
-                    </ListItemButton>
+                        <ListItemButton onClick={toogleSideMenu} >
+                            <ListItemIcon>
+                                <ConfirmationNumberOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Mis Ordenes'} />
+                        </ListItemButton>
+                    </>
+                    }
 
 
 
@@ -112,44 +124,51 @@ export const SideMenu = () => {
                     </ListItemButton>
 
 
-                    <ListItemButton onClick={toogleSideMenu} >
-                        <ListItemIcon>
-                            <VpnKeyOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Ingresar'} />
-                    </ListItemButton>
+                    {!isLoggedIn && <>
+                        <ListItemButton onClick={() => navigateSideMenu(`/auth/login?p=${router.asPath}`)} >
+                            <ListItemIcon>
+                                <VpnKeyOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Ingresar'} />
+                        </ListItemButton>
+                    </>
+                    }
+                    {isLoggedIn && <>
+                        <ListItemButton onClick={onLogout}>
+                            <ListItemIcon>
+                                <LoginOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Salir'} />
+                        </ListItemButton>
+                    </>
+                    }
 
-                    <ListItemButton onClick={toogleSideMenu}>
-                        <ListItemIcon>
-                            <LoginOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Salir'} />
-                    </ListItemButton>
+                    {
+                        user?.role == 'admin' &&
+                        <>
+                            <Divider />
+                            <ListSubheader>Admin Panel</ListSubheader>
 
+                            <ListItemButton onClick={toogleSideMenu} >
+                                <ListItemIcon>
+                                    <CategoryOutlined />
+                                </ListItemIcon>
+                                <ListItemText primary={'Productos'} />
+                            </ListItemButton>
+                            <ListItemButton onClick={toogleSideMenu} >
+                                <ListItemIcon>
+                                    <ConfirmationNumberOutlined />
+                                </ListItemIcon>
+                                <ListItemText primary={'Ordenes'} />
+                            </ListItemButton>
 
-                    {/* Admin */}
-                    <Divider />
-                    <ListSubheader>Admin Panel</ListSubheader>
-
-                    <ListItemButton onClick={toogleSideMenu} >
-                        <ListItemIcon>
-                            <CategoryOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Productos'} />
-                    </ListItemButton>
-                    <ListItemButton onClick={toogleSideMenu} >
-                        <ListItemIcon>
-                            <ConfirmationNumberOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Ordenes'} />
-                    </ListItemButton>
-
-                    <ListItemButton onClick={toogleSideMenu}>
-                        <ListItemIcon>
-                            <AdminPanelSettings />
-                        </ListItemIcon>
-                        <ListItemText primary={'Usuarios'} />
-                    </ListItemButton>
+                            <ListItemButton onClick={toogleSideMenu}>
+                                <ListItemIcon>
+                                    <AdminPanelSettings />
+                                </ListItemIcon>
+                                <ListItemText primary={'Usuarios'} />
+                            </ListItemButton>
+                        </>}
                 </List>
             </Box>
         </Drawer >
