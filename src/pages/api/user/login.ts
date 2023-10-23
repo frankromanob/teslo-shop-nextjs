@@ -9,6 +9,7 @@ type Data =
     | {
         token: string;
         user: {
+            _id: string;
             email: string;
             role: string;
             name: string;
@@ -37,11 +38,11 @@ const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.disconnect()
 
     if (!user) {
-        return res.status(400).json({ message: 'Usuario o contraseña no válidos - U' })
+        return res.status(400).json({ message: 'Usuario o contraseña no válidos' })
     }
 
     if (!bcrypt.compareSync(password, user.password!)) {
-        return res.status(400).json({ message: 'Usuario o contraseña no válidos - P' })
+        return res.status(400).json({ message: 'Usuario o contraseña no válidos' })
     }
     const { _id, role, name } = user;
 
@@ -50,7 +51,7 @@ const loginUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(200).json({
         token,
         user: {
-            email, role, name
+            _id,email, role, name
         }
     })
 }

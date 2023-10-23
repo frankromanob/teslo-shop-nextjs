@@ -6,9 +6,9 @@ import { SWRConfig } from 'swr';
 import { AuthProvider, CartProvider, UiProvider } from '@/context';
 import { SessionProvider } from "next-auth/react"
 
-export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+export default function App({ Component, pageProps}: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider >
       <SWRConfig
         value={{
           //refreshInterval: 3000,

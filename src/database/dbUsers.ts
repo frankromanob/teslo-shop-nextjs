@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 export const checkUserEmailPassword = async (email: string, password: string) => {
     await db.connect()
 
-    const user = await User.findOne({ email }).lean()
+    const user = await User.findOne({ email })
     await db.disconnect()
 
     if (!user) {
@@ -20,7 +20,8 @@ export const checkUserEmailPassword = async (email: string, password: string) =>
     const { role, name, _id } = user;
 
     return {
-        id: _id,
+        _id,
+        id:_id,
         name,
         role,
         email: email.toLocaleLowerCase()
@@ -31,7 +32,7 @@ export const checkUserEmailPassword = async (email: string, password: string) =>
 
 export const oAuthToDbUser = async (oAuthEmail: string, oAuthName: string) => {
     await db.connect()
-    const user = await User.findOne({ email: oAuthEmail }).lean()
+    const user = await User.findOne({ email: oAuthEmail })
 
     if (user) {
         await db.disconnect()
