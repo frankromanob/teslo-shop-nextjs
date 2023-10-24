@@ -29,7 +29,7 @@ const createOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
 
     const { orderItems, total } = req.body as IOrder
     //console.log(authOptions)
-    const session: any = await getServerSession(authOptions)
+    const session: any = await getServerSession(req,res, authOptions)
     console.log('ESO:', session)
     if (!session) {
         return res.status(401).json({ message: 'Debe estar autenticado!' })
