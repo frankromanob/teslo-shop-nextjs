@@ -4,6 +4,7 @@ import authOptions from "@/pages/api/auth/[...nextauth]"
 import { IOrder } from '@/interfaces';
 import { db } from '@/database';
 import { Products, Orders } from '@/models';
+import { getSession } from 'next-auth/react';
 
 
 type Data =
@@ -27,9 +28,9 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
 const createOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const { orderItems, total } = req.body as IOrder
-    //console.log('first')
-    const session: any = await getServerSession(req, res, authOptions)
-   // console.log('ESO:', session)
+    //console.log(authOptions)
+    const session: any = await getServerSession(authOptions)
+    console.log('ESO:', session)
     if (!session) {
         return res.status(401).json({ message: 'Debe estar autenticado!' })
     }
@@ -60,18 +61,19 @@ const createOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         }
 
         const userId = session.user._id;
-        if (!userId){
-            console.log('No hay user!',userId,session)
+        if (!userId) {
+            console.log('No hay user!', userId, session)
             throw new Error('No se pudo obtener el usuario de la sesión')
         }
         const newOrder = new Orders({ ...req.body, isPaid: false, user: userId })
+        //console.log(req.body)
         await newOrder.save()
         await db.disconnect()
-       return res.status(201).json(newOrder)
+        return res.status(201).json(newOrder)
 
     } catch (error: any) {
         await db.disconnect()
-       //console.log(error.message)
+        console.log(error.message)
         res.status(400).json({ message: error.message || 'Revise los logs del servidor' })
     }
     await db.disconnect()

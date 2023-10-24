@@ -130,7 +130,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
                 ...p,
                 size: p.size!
             })),
-            shippingaddress: state.shippingAddress,
+            shippingAddress: state.shippingAddress,
             numberOfItems: state.numberOfItems,
             subTotal: state.subTotal,
             tax: state.tax,

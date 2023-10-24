@@ -5,7 +5,7 @@ export interface IOrder {
     _id?: string;
     user?: IUser | string
     orderItems: IOrderItem[]
-    shippingaddress:ShippingAddress
+    shippingAddress:ShippingAddress
     paymentResult?:string
     numberOfItems: number
     subTotal: number

@@ -3,7 +3,7 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { checkUserEmailPassword, oAuthToDbUser } from "@/database";
-import type { NextAuthOptions, Session } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import { AdapterUser } from "next-auth/adapters";
 
 
@@ -49,9 +49,11 @@ export const authOptions: NextAuthOptions = {
     maxAge: 2592000, //30d
     strategy: 'jwt',
     updateAge: 86400, //1d
+
   },
 
   callbacks: {
+
 
     async jwt({ token, account, user }) {
 
@@ -66,19 +68,14 @@ export const authOptions: NextAuthOptions = {
             token.user = user
             break;
         }
-
       }
 
       return token;
     },
     async session({ session, token, user }) {
-      //console.log({ session, token, user });
-
       session.accessToken = token.accessToken as string;
       user = token.user! as AdapterUser
       session.user = token.user! as AdapterUser
-      //  console.log({ session, token, user });
-      //console.log({ session })
       return session;
     }
 

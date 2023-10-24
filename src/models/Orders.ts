@@ -1,6 +1,7 @@
 import mongoose, { Schema, model, Model } from 'mongoose'
 import { IOrder } from '@/interfaces'
 
+
 const orderSchema = new Schema({
 
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -26,15 +27,15 @@ const orderSchema = new Schema({
     },
     numberOfItems: { type: Number, required: true },
     total: { type: Number, required: true },
-    subtotal: { type: Number, required: true },
+    subTotal: { type: Number, required: true },
     tax: { type: Number, required: true },
-    isPaig: { type: Number, required: true },
+    isPaid: { type: Number, required: true },
     paidAt: { type: Boolean, required: true, default:false },
 
 }, {
     timestamps: true
 })
 
-const Order: Model<IOrder> = mongoose.models.User || model('Order', orderSchema)
+const Order: Model<IOrder> = mongoose.models.Order || model('Order', orderSchema)
 
 export default Order
