@@ -1,10 +1,12 @@
+
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next';
-import authOptions from "@/pages/api/auth/[...nextauth]"
+import { authOptions } from "@/pages/api/auth/[...nextauth]"
 import { IOrder } from '@/interfaces';
 import { db } from '@/database';
 import { Products, Orders } from '@/models';
-import { getSession } from 'next-auth/react';
+
+
 
 
 type Data =
@@ -25,16 +27,19 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
     //res.status(200).json({ message: 'Hola' })
 }
 
+
 const createOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const { orderItems, total } = req.body as IOrder
-    //console.log(authOptions)
-    const session: any = await getServerSession(req,res, authOptions)
-    console.log('ESO:', session)
+
+
+    const session: any = await getServerSession(req, res, authOptions)
+
     if (!session) {
         return res.status(401).json({ message: 'Debe estar autenticado!' })
     }
 
+    //console.log('ESO:', session)
     const productsIds = orderItems.map(product => product._id)
     await db.connect()
 
@@ -60,6 +65,7 @@ const createOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
             throw new Error('Por favor revise el carrito, los totales no cuadran')
         }
 
+        // const userId = '6511e1cd81e6df88febf7c34'
         const userId = session.user._id;
         if (!userId) {
             console.log('No hay user!', userId, session)

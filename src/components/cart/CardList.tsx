@@ -4,33 +4,37 @@ import NextLink from "next/link";
 import { ItemCounter } from "../ui";
 import { useContext } from "react";
 import { CartContext } from "@/context";
-import { ICartProduct } from "@/interfaces";
+import { ICartProduct, IOrderItem } from "@/interfaces";
 
 
 
 interface Props {
-    editable: boolean
+    editable: boolean,
+    orderItems?: IOrderItem[]
 }
 
 
 
-export const CardList = ({ editable = false }: Props) => {
+export const CardList = ({ editable = false, orderItems }: Props) => {
 
-    const { cart, updateCartQuantity,removeProductInCart } = useContext(CartContext)
 
-    const selectedQuantity = (product: ICartProduct,newQuantity:number) => {
-        product.quantity=newQuantity
+    const { cart, updateCartQuantity, removeProductInCart } = useContext(CartContext)
+
+
+    const selectedQuantity = (product: ICartProduct, newQuantity: number) => {
+        product.quantity = newQuantity
         updateCartQuantity(product)
     }
 
-    const removeItem=(product:ICartProduct)=>{
+    const removeItem = (product: ICartProduct) => {
         removeProductInCart(product)
     }
 
+    const productsToShow = orderItems ? orderItems : cart
     return (
         <>
             {
-                cart.map(product => (
+                productsToShow.map(product => (
                     <Grid container spacing={2} sx={{ mb: 1 }} key={product.slug + product.size}>
                         <Grid item xs={3} columns={2} flex='1' flexDirection='row'>
                             <NextLink href={`/product/${product.slug}`} passHref legacyBehavior>
@@ -53,8 +57,8 @@ export const CardList = ({ editable = false }: Props) => {
                                     editable
                                         ? <ItemCounter
                                             cantidadItems={product.quantity}
-                                            maxValue={product.inStock}
-                                            onSelectedQuantity={(newQuantity) => selectedQuantity(product,newQuantity)} />
+                                            maxValue={5}
+                                            onSelectedQuantity={(newQuantity) => selectedQuantity(product as ICartProduct, newQuantity)} />
                                         : <Typography variant="h6">{product.quantity}</Typography>
                                 }
                             </Box>
@@ -64,9 +68,9 @@ export const CardList = ({ editable = false }: Props) => {
                             {
                                 editable &&
                                 (<Button variant="text"
-                                         color="secondary"
-                                         onClick={()=>removeItem(product)}
-                                 >Eliminar</Button>)
+                                    color="secondary"
+                                    onClick={() => removeItem(product as ICartProduct)}
+                                >Eliminar</Button>)
                             }
                         </Grid>
                     </Grid>

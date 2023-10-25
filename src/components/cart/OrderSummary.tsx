@@ -1,14 +1,23 @@
 import { CartContext } from "@/context";
 import { Grid, Typography } from "@mui/material"
 import { useContext } from "react";
-import {currency} from '@/utils'
+import { currency } from '@/utils'
+import { IOrder } from "@/interfaces";
 
+interface Props {
+    orderData?: {
+        tax: number,
+        total: number,
+        subTotal: number,
+        numberOfItems: number,
+    }
+}
 
-export const OrderSummary = () => {
+export const OrderSummary = ({ orderData }: Props) => {
 
-    const { tax,total,subTotal,numberOfItems } = useContext(CartContext)
+    const { tax, total, subTotal, numberOfItems } = useContext(CartContext)
 
-
+    const order = orderData ? orderData : { tax, total, subTotal, numberOfItems }
     // const [orderSummary, setOrderSummary] = useState({
     //     productos: 0,
     //     subtotal: 0,
@@ -48,25 +57,25 @@ export const OrderSummary = () => {
                 <Typography>No. Productos</Typography>
             </Grid>
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{numberOfItems}</Typography>
+                <Typography>{order.numberOfItems}</Typography>
             </Grid>
             <Grid item xs={6}>
                 <Typography>Subtotal</Typography>
             </Grid>
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{currency.format(subTotal)}</Typography>
+                <Typography>{currency.format(order.subTotal)}</Typography>
             </Grid>
             <Grid item xs={6}>
-                <Typography>Impuestos ({Number(process.env.NEXT_PUBLIC_TAX_RATE)*100}%)</Typography>
+                <Typography>Impuestos ({Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100}%)</Typography>
             </Grid>
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{currency.format(tax)}</Typography>
+                <Typography>{currency.format(order.tax)}</Typography>
             </Grid>
             <Grid item xs={6} sx={{ marginTop: 2 }}>
                 <Typography variant="subtitle1">Total:</Typography>
             </Grid>
             <Grid item xs={6} sx={{ marginTop: 2 }} display='flex' justifyContent='end'>
-                <Typography variant="subtitle1">{currency.format(total)}</Typography>
+                <Typography variant="subtitle1">{currency.format(order.total)}</Typography>
             </Grid>
         </Grid>
     )

@@ -1,8 +1,9 @@
 import { PropsWithChildren, useEffect, useReducer } from 'react';
 import { cartReducer, CartContext } from './';
-import { ICartProduct, IOrder, ShippingAddress } from '@/interfaces';
+import { ICartProduct, IOrder, IUser, ShippingAddress } from '@/interfaces';
 import Cookies from 'js-cookie'
 import { tesloApi } from '@/api';
+import axios from 'axios';
 
 
 export interface CartState {
@@ -119,7 +120,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
         dispatch({ type: '[Cart] - Update Address', payload: address })
     }
 
-    const createOrder = async () => {
+    const createOrder = async (): Promise<{ hasError: boolean, message: string; }> => {
         if (!state.shippingAddress) {
             throw new Error('No hay dirección de entrega!')
         }
@@ -136,15 +137,30 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
             tax: state.tax,
             total: state.total,
             isPaid: false,
-            //user:session
         }
 
 
         try {
-            const { data } = await tesloApi.post('/orders', body)
-            console.log(data)
+            const { data } = await tesloApi.post<IOrder>('/orders', body)
+
+            dispatch({ type: '[Cart] - Order Completed' })
+
+            return {
+                hasError: false,
+                message: data._id!
+            }
         } catch (error) {
-            console.log(error)
+            //console.log(error)
+            if (axios.isAxiosError(error)) {
+                return {
+                    hasError: true,
+                    message: error.response?.data.message
+                }
+            }
+            return {
+                hasError: true,
+                message: 'Error inesperado'
+            }
         }
     }
     return (

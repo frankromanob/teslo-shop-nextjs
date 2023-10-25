@@ -3,9 +3,9 @@ import { Products } from '../models'
 import { IProduct } from '../interfaces';
 
 export const getProductBySlug = async (slug: string): Promise<IProduct | null> => {
-    db.connect()
+    await db.connect()
     const product = await Products.findOne({ slug }).lean()
-    db.disconnect()
+    await db.disconnect()
 
     if (product) {
         return JSON.parse(JSON.stringify(product));
@@ -19,9 +19,9 @@ interface ProductSlug {
 }
 
 export const getAllProductsSlugs = async (): Promise<ProductSlug[]> => {
-    db.connect()
+    await db.connect()
     const slugs = await Products.find().select('slug -_id').lean()
-    db.disconnect()
+    await db.disconnect()
     return JSON.parse(JSON.stringify(slugs))
 
 }
@@ -46,9 +46,9 @@ export const getSearchProducts = async (term: string): Promise<IProduct[]> => {
 
 
 export const getAllProducts = async (): Promise<IProduct[]> => {
-    db.connect()
+    await db.connect()
     const allProducts = await Products.find().select('title gender images price inStock slug tags -_id').lean()
-    db.disconnect()
+    await db.disconnect()
     return JSON.parse(JSON.stringify(allProducts))
 
 }
