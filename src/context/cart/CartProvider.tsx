@@ -137,6 +137,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
             tax: state.tax,
             total: state.total,
             isPaid: false,
+            transactionId:''
         }
 
 
