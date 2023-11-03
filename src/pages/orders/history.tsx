@@ -1,10 +1,9 @@
 import { ShopLayout } from '@/components/layouts'
 import { Button, Chip, Grid, Typography } from '@mui/material'
-import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import NextLink from "next/link";
 import { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react';
-import { redirect } from 'next/dist/server/api-utils';
 import { dbOrders } from '@/database';
 import { IOrder } from '@/interfaces';
 import { currency } from '@/utils';

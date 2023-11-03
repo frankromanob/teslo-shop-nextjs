@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
-import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, Person2Outlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, DashboardOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, Person2Outlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { AuthContext, UiContext } from "../../context";
 import { useContext, useState } from 'react';
 import { useRouter } from "next/router";
@@ -69,7 +69,7 @@ export const SideMenu = () => {
                             <ListItemText primary={'Perfil'} />
                         </ListItemButton>
 
-                        <ListItemButton onClick={()=>navigateSideMenu('/orders/history')} >
+                        <ListItemButton onClick={() => navigateSideMenu('/orders/history')} >
                             <ListItemIcon>
                                 <ConfirmationNumberOutlined />
                             </ListItemIcon>
@@ -149,20 +149,28 @@ export const SideMenu = () => {
                             <Divider />
                             <ListSubheader>Admin Panel</ListSubheader>
 
-                            <ListItemButton onClick={toogleSideMenu} >
+                            <ListItemButton onClick={() => navigateSideMenu('/admin')} >
+                                <ListItemIcon>
+                                    <DashboardOutlined />
+                                </ListItemIcon>
+                                <ListItemText primary={'Dashboard'} />
+                            </ListItemButton>
+
+                            <ListItemButton onClick={() => navigateSideMenu('/admin/products')} >
                                 <ListItemIcon>
                                     <CategoryOutlined />
                                 </ListItemIcon>
                                 <ListItemText primary={'Productos'} />
                             </ListItemButton>
-                            <ListItemButton onClick={toogleSideMenu} >
+
+                            <ListItemButton onClick={() => navigateSideMenu('/admin/orders')}>
                                 <ListItemIcon>
                                     <ConfirmationNumberOutlined />
                                 </ListItemIcon>
                                 <ListItemText primary={'Ordenes'} />
                             </ListItemButton>
 
-                            <ListItemButton onClick={toogleSideMenu}>
+                            <ListItemButton onClick={() => navigateSideMenu('/admin/users')}>
                                 <ListItemIcon>
                                     <AdminPanelSettings />
                                 </ListItemIcon>
