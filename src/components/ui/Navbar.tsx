@@ -41,7 +41,7 @@ export const Navbar = () => {
                 <NextLink href='/' passHref legacyBehavior>
                     <Link display='flex' alignItems='center'>
                         <Typography variant='h6' >Teslo |</Typography>
-                        <Typography sx={{ ml: 0.5 }}>Shop</Typography>
+                        <Typography sx={{ ml: 0.5 }}>Shop (Demo by RomApps)</Typography>
                     </Link>
                 </NextLink>
                 <Box flex={1} />
