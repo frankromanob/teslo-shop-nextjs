@@ -29,7 +29,7 @@ export default function Handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
 const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const { email = '', password = '', name = '' } = req.body as { email: string, password: string, name: string }
+    const { name = '', email = '', password = ''  } = req.body as {name: string, email: string, password: string  }
 
     if (password.length < 6) {
         return res.status(400).json({ message: 'La contraseña debe ser de al menos 6 caracteres.' })
@@ -38,6 +38,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         return res.status(400).json({ message: 'El nombre debe ser de al menos 2 caracteres.' })
     }
 
+    console.log(name, email, password)
     if (!validations.isValidEmail(email)) {
         return res.status(400).json({ message: 'Correo con formato inválido' })
     }

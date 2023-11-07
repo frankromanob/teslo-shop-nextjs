@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { PropsWithChildren } from "react";
-import { Navbar, SideMenu } from "../ui";
+import { FooterPage, Navbar, SideMenu } from "../ui";
 
 
 interface Props {
@@ -37,8 +37,7 @@ export const ShopLayout = ({children, title,pageDescription,imageFullUrl}: Props
                 {children}
             </main>
             <footer>
-                 {/*Footer */}
-                 <h5>footer</h5>
+                <FooterPage />
             </footer>
         </>
     )
